@@ -1,0 +1,14 @@
+name: healthcheck
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Up
+        run: docker-compose up -d
+
+      - name: Test
+        run: docker run --network container:kong appropriate/curl -s -4 --retry 10 --retry-connrefused http://localhost:8001/
